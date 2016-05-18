@@ -3,6 +3,20 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      options: {
+        separator: ';'
+      },
+      live: {
+        src: ['public/client/*.js', 
+              'public/lib/*.js', 
+              'app/*.js', 
+              'app/**/*.js', 
+              'lib/*.js', 
+              'test/*.js', 
+              'server.js',
+              'server-config.js'],
+        dest: 'public/dist/production.js' 
+      }
     },
 
     mochaTest: {
@@ -16,16 +30,26 @@ module.exports = function(grunt) {
 
     nodemon: {
       dev: {
-        script: 'server.js'
+        script: 'server.js',
+        env: {
+          PORT: '4568'
+        }
       }
     },
 
     uglify: {
+      target: {
+        files: {
+          'public/dist/production-min.js': ['public/dist/production.js']
+        }
+
+      }
     },
 
     eslint: {
       target: [
         // Add list of files to lint here
+        'public/dist/production.js'
       ]
     },
 
@@ -51,8 +75,10 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: ['git add .', 'git commit -m "Pushing to live server"', 'git push live master'].join('&&')
       }
     },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -82,6 +108,7 @@ module.exports = function(grunt) {
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
+      grunt.task.run(['shell']);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -89,6 +116,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('deploy', [
     // add your deploy tasks here
+  ]);
+
+  grunt.registerTask('default', ['concat', 'uglify'
   ]);
 
 
