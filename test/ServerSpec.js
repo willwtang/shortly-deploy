@@ -124,6 +124,7 @@ describe('', function() {
           .expect(302)
           .expect(function(res) {
             var redirect = res.headers.location;
+            console.log(redirect);
             expect(redirect).to.equal('http://www.roflzoo.com/');
           })
           .end(done);
@@ -188,6 +189,7 @@ describe('', function() {
     });
 
     it('Successful signup logs in a new user', function(done) {
+      this.timeout(2500);
       request(app)
         .post('/signup')
         .send({
@@ -195,6 +197,7 @@ describe('', function() {
           'password': 'Phillip' })
         .expect(302)
         .expect(function(res) {
+          console.log(res.headers.location);
           expect(res.headers.location).to.equal('/');
           request(app)
             .get('/logout')
@@ -206,6 +209,7 @@ describe('', function() {
   }); // 'Account Creation'
 
   describe('Account Login:', function() {
+    this.timeout(3000);
 
     beforeEach(function(done) {
       new User({
