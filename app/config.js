@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var ip = require('ip');
 
+console.log('THE IP', ip.address());
 var conn = mongoose.connect('mongodb://' + ip.address() + '/shortly-deploy');
 mongoose.connection.on('error', function() {
   console.log('error on connecting to mongodb');

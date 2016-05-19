@@ -13,7 +13,7 @@ var Link = require('../app/models/link');
 
 describe('', function() {
 
-  xbeforeEach(function(done) {
+  beforeEach(function(done) {
     // Log out currently signed in user
     request(app)
       .get('/logout')
