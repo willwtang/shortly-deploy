@@ -7,14 +7,11 @@ module.exports = function(grunt) {
         separator: ';'
       },
       live: {
-        src: ['public/client/*.js', 
-              'public/lib/*.js', 
-              'app/*.js', 
-              'app/**/*.js', 
-              'lib/*.js', 
-              'test/*.js', 
-              'server.js',
-              'server-config.js'],
+        src: ['public/lib/jquery.js',
+              'public/lib/underscore.js',
+              'public/lib/backbone.js', 
+              'public/lib/handlebars.js',
+              'public/client/*.js'],
         dest: 'public/dist/production.js' 
       }
     },
@@ -54,6 +51,15 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+      target: {
+        files: [{
+          expand: true,
+          cwd: 'public',
+          src: ['*.css', '!*.min.css'],
+          dest: 'public/dist',
+          ext: '.min.css'
+        }]
+      }
     },
 
     watch: {
@@ -77,7 +83,7 @@ module.exports = function(grunt) {
       prodServer: {
         command: ['git add .', 'git commit -m "Pushing to live server"', 'git push live master'].join('&&')
       }
-    },
+    }
 
   });
 
@@ -103,6 +109,10 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'concat',
+    'uglify',
+    'eslint',
+    'cssmin'
   ]);
 
   grunt.registerTask('upload', function(n) {
@@ -115,10 +125,10 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
+
   ]);
 
-  grunt.registerTask('default', ['concat', 'uglify'
+  grunt.registerTask('default', ['build', 'test', 'deploy'
   ]);
 
 
