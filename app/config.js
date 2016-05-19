@@ -1,8 +1,9 @@
 var mongodb = require('mongodb');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ip = require('ip');
 
-var conn = mongoose.connect('mongodb://127.0.0.1/shortly-deploy');
+var conn = mongoose.connect('mongodb://' + ip.address() + '/shortly-deploy');
 mongoose.connection.on('error', function() {
   console.log('error on connecting to mongodb');
 });
